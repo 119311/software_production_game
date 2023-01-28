@@ -1,0 +1,13 @@
+{
+  "clang-tidy.compilerArgs": [
+    "-I./include",
+    "-lglut",
+    "-lGLU",
+    "-lGL",
+    "-lm",
+    "-O2",
+    "-std=c++11",
+    "-Wall",
+    "-Wextra"
+  ]
+}
