@@ -1,4 +1,5 @@
 #include <common.hpp>
+
 void initGlSettings(void)
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);

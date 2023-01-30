@@ -1,19 +1,18 @@
 #include <common.hpp>
-void read_stl_fighter(point po[][3], point nv[], int trinum)
 
+void readStlFighter(point po[][3], point nv[], int trinum)
 {
-	FILE *fi;
-	char  name[150];
-	char  head[80];
-	float N[3], P[9];
-	int   n;
+	FILE        *fi;
+	char         head[80];
+	float        N[3], P[9];
+	int          n;
+	signed short c;
+	const char   name[] = "./assets/object/fighter.stl";
 
-	int16_t c;
-	sprintf(name, "assets/object/fighter.stl");    //戦闘機のstlファイルを読み込み
 	if ((fi = fopen(name, "r")) == NULL)
 	{
 		printf("Error \n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	fread(head, 1, 80, fi);
 	fread(&n, 4, 1, fi);
@@ -37,8 +36,10 @@ void read_stl_fighter(point po[][3], point nv[], int trinum)
 		fread(&c, 2, 1, fi);
 	}
 	fclose(fi);
-	//重心を求め,オブジェクトの中心を原点とする
-	float sumx = 0.0, sumy = 0.0, sumz = 0.0;
+
+	float sumx, sumy, sumz;
+	sumx = sumy = sumz = 0.;
+
 	for (int i = 0; i < trinum; i++)
 	{
 		for (int j = 0; j < 3; j++)
@@ -48,9 +49,10 @@ void read_stl_fighter(point po[][3], point nv[], int trinum)
 			sumz += po[i][j].z;
 		}
 	}
-	sumx /= (trinum * 3.0);
-	sumy /= (trinum * 3.0);
-	sumz /= (trinum * 3.0);
+	sumx /= (trinum * 3.);
+	sumy /= (trinum * 3.);
+	sumz /= (trinum * 3.);
+
 	for (int i = 0; i < trinum; i++)
 	{
 		for (int j = 0; j < 3; j++)

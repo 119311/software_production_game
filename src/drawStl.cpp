@@ -1,7 +1,7 @@
 #include <common.hpp>
-void drawStl(float *a, float *d, float *s, point po[][3], point nv[], int trinum)
+void drawStl(const float *a, const float *d, const float *s, point po[][3], point nv[], int trinum)
 {
-	float shininess[] = {25.0};
+	const float shininess[] = {25.0};
 	glMaterialfv(GL_FRONT, GL_AMBIENT, a);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, d);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, s);

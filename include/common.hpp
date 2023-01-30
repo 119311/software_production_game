@@ -1,6 +1,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include <array>
 #include <cmath>
 #include <const.hpp>
 #include <cstdint>
@@ -9,17 +10,17 @@
 #include <iostream>
 typedef struct
 {
-	double posx;
-	double posy;
-	double posz;
-	double vx;
-	double vy;
-	double rotX;
-	double rotY;
-	double rotZ;
-	int    tflag;
-	int    shape;
-	int    durability;
+	float posX;
+	float posY;
+	float posZ;
+	float vx;
+	float vy;
+	float rotX;
+	float rotY;
+	float rotZ;
+	int   tflag;
+	int   shape;
+	int   durability;
 } property;
 
 typedef struct
@@ -29,45 +30,55 @@ typedef struct
 	float z;
 } point;
 
-extern double   rotX, rotY, rotZ, tx, ty, tz;
-extern property enemy[ENEMY_NUMBER], missile[MISSILE_NUMBER];
-extern uint8_t  background[WINDOW_WIDTH * WINDOW_HEIGHT * 3];
+extern float    rotX, rotY, rotZ, tx, ty, tz;
 extern int      mouseFlag, mv, selectFlag, storyFlag, trinum;
+extern property enemy[ENEMY_NUMBER], missile[MISSILE_NUMBER], player, enemyMissile[MISSILE_NUMBER];
+extern int      gamePop[popXsize * popYsize * 3], background[WINDOW_WIDTH * WINDOW_HEIGHT * 3], gameClear[popXsize * popYsize * 3], gameOver[popXsize * popYsize * 3], story1[WINDOW_WIDTH * WINDOW_HEIGHT * 3], story2[WINDOW_WIDTH * WINDOW_HEIGHT * 3], TexImage[TexNum][IMAGE_WIDTH * IMAGE_HEIGHT * 3], title[WINDOW_WIDTH * WINDOW_HEIGHT * 3];
 
-void collisionJudge(property *enemy, property *missile);
-void drawCone(float *a, float *d, float *s);
-void drawCube(float *a, float *d, float *s);
-void drawCylinder(float *a, float *d, float *s);
-void drawDodecahedron(float *a, float *d, float *s);
-void drawIcosahedron(float *a, float *d, float *s);
-void drawMissile(property *missile);
-void drawOctahedron(float *a, float *d, float *s);
+void collisionJudge(property *enemy, property *missile, property *enemyMissile);
+void drawCone(const float *a, const float *d, const float *s);
+void drawCube(const float *a, const float *d, const float *s);
+void drawCylinder(const float *a, const float *d, const float *s);
+void drawDodecahedron(const float *a, const float *d, const float *s);
+void drawEnemyHitPointBar(int c);
+void drawEnemyMissile(void);
+void drawIcosahedron(const float *a, const float *d, const float *s);
+void drawMissile(void);
+void drawPlayerHitPointBar(int c);
+void drawOctahedron(const float *a, const float *d, const float *s);
+void drawPlane(void);
 void drawPlaneWithTexture(int i);
-void drawSphere(float *a, float *d, float *s);
-void drawStl(float *a, float *d, float *s, point po[][3], point nv[], int trinum);
-void drawTeapot(float *a, float *d, float *s);
-void drawTorus(float *a, float *d, float *s);
+void drawSphere(const float *a, const float *d, const float *s);
+void drawStl(const float *a, const float *d, const float *s, point po[][3], point nv[], int trinum);
+void drawTeapot(const float *a, const float *d, const float *s);
+void drawTorus(const float *a, const float *d, const float *s);
 void enemyCharacter(property *enemy);
 void idleProc(void);
 void image(void);
-void initEnemyProperty(property enemy[]);
+void initEnemyProperty(int i, property enemy[]);
 void initGlSettings(void);
-void initializeTexture(uint8_t TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3], const char *fname[], int n);
+void initializeTexture(int TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3], const char *fname[]);
 void initLightSettings(void);
+void initPlayerProperty(void);
+void initProperty(void);
 void keyboardProc(uint8_t key, int x, int v);
-void loadBackground(uint8_t background[]);
-void loadStoryImage1(uint8_t story1[]);
-void loadStoryImage2(uint8_t story2[]);
-void loadTexture(int n, const char *fname[], uint8_t TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3]);
+void loadBackground(int background[]);
+void loadGameClear(int gameClear[]);
+void loadGameOver(int gameOver[]);
+void loadStoryImage1(int story1[]);
+void loadStoryImage2(void);
+void loadTexture(int n, const char *fname[], int TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3]);
+void loadTitle(int title[]);
 void motionProc(int x, int v);
-void mouseProc(int button, int state, int x, int v);
-void myCharacter(void);
-void myCharacterStl1(point po[][3], point nv[], int trinum);
-void myCircle(double r, int n);
-void myDisc(double r, int n);
-void mySolidCylinder(double r, double h, int n);
-void myWireCylinder(double r, double h, int n);
-void SolidCylinder(double r, double h, int n);
+void mouseProc(int button, int state, int x, int y);
+void playerCircle(const float r, int n);
+void playerDisc(const float r, int n);
+void playerSolidCylinder(const float r, const float h, int n);
+void playerStl1(point po[][3], point nv[], int trinum);
+void playerWireCylinder(const float r, const float h, int n);
+void readStlFighter(point po[][3], point nv[], int trinum);
+void SolidCylinder(const float r, const float h, int n);
 void story(int storyFlag);
-void updateMissile(property *missile);
-void initializeTexture(uint8_t TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3], const char *fname[]);
+void updateEnemyMissile(void);
+void updateMissile(void);
+void updatePlayer(void);

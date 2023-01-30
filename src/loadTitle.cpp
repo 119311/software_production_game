@@ -1,6 +1,6 @@
 #include <common.hpp>
 
-void loadStoryImage2(void)
+void loadTitle(int title[])
 {
 	FILE *fp;
 	char  buf[100];
@@ -8,18 +8,17 @@ void loadStoryImage2(void)
 
 	const char name[] = "./assets/img/title.ppm";
 
-	if (!(fp = fopen(name, "r")))
+	if ((fp = fopen(name, "r")) == NULL)
 	{
 		fprintf(stderr, "Cannot open texture file %s\n", name);
 		exit(EXIT_FAILURE);
 	}
-
-	for (int i = 0; i < headerLines; i++)
+	for (int j = 0; j < headerLines; j++)
 	{
 		fgets(buf, 100, fp);
 		if (*buf == '#')
-			i--;
+			j--;
 	}
-	fread(story2, WINDOW_WIDTH * WINDOW_HEIGHT * 3, 1, fp);
+	fread(title, WINDOW_WIDTH * WINDOW_HEIGHT * 3, 1, fp);
 	fclose(fp);
 }

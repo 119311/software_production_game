@@ -1,4 +1,5 @@
 #include <common.hpp>
+
 void drawPlaneWithTexture(int i)
 {
 	glEnable(GL_TEXTURE_2D);

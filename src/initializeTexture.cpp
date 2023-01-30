@@ -1,6 +1,6 @@
 #include <common.hpp>
 
-void initializeTexture(uint8_t TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3], const char *fname[])
+void initializeTexture(int TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3], const char *fname[])
 {
 	for (int i = 0; i < TexNum; i++)
 	{

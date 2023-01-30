@@ -1,4 +1,5 @@
 #include <common.hpp>
+
 void idleProc(void)
 {
 	rotY += 3.0;

@@ -1,18 +1,17 @@
 #include <common.hpp>
 
-void loadStoryImage1(uint8_t story1[])
+void loadStoryImage1(int story1[])
 {
-	FILE *fp;
-	char  buf[100];
-	char  name[500];
-	int   header_lines = 3;
-	sprintf(name, "./okd.ppm");
+	FILE      *fp;
+	char       buf[100];
+	const char name[]      = "./assets/img/okd.ppm";
+	int        headerLines = 3;
 	if (!(fp = fopen(name, "r")))
 	{
 		fprintf(stderr, "Cannot open texture file %s\n", name);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
-	for (int j = 0; j < header_lines; j++)
+	for (int j = 0; j < headerLines; j++)
 	{
 		fgets(buf, 100, fp);
 		if (*buf == '#')

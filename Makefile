@@ -1,7 +1,7 @@
 SUFFIX := .cpp
 PROGNAME := main
 COMPILER := g++
-CPPFLAGS := -O2 -std=c++11 -Wall -Wextra -pipe
+CPPFLAGS := -std=c++11 -Wall -Wextra -pipe -O2
 LIBFLAGS := -lglut -lGLU -lGL -lm
 
 SOURCEDIR := ./src/

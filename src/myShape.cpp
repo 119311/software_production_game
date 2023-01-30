@@ -1,35 +1,26 @@
 #include <common.hpp>
-void myWireCylinder(double r, double h, int n)
+
+void playerWireCylinder(const float r, const float h, int n)
 {
-	double x, y, z, dq;
-	int    i;
-	dq = (2.0 * M_PI) / n;
-	y  = 0.5 * h;
 	glPushMatrix();
-	glRotatef(-dq * 180.0 / (2.0 * M_PI), 0.0, 1.0, 0.0);
+	glRotatef(-(2.0 * M_PI) / n * 180.0 / PI2, 0.0, 1.0, 0.0);
 	glBegin(GL_LINES);
-	for (i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		x = r * cos(dq * i);
-		z = r * sin(dq * i);
-		glVertex3f(x, y, z);
-		glVertex3f(x, -y, z);
+		glVertex3f(r * cos((2.0 * M_PI) / n * i), 0.5 * h, r * sin((2.0 * M_PI) / n * i));
+		glVertex3f(r * cos((2.0 * M_PI) / n * i), -0.5 * h, r * sin((2.0 * M_PI) / n * i));
 	}
 	glEnd();
 	glBegin(GL_LINE_LOOP);
-	for (i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		x = r * cos(dq * i);
-		z = r * sin(dq * i);
-		glVertex3f(x, y, z);
+		glVertex3f(r * cos((2.0 * M_PI) / n * i), 0.5 * h, r * sin((2.0 * M_PI) / n * i));
 	}
 	glEnd();
 	glBegin(GL_LINE_LOOP);
-	for (i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 	{
-		x = r * cos(dq * i);
-		z = r * sin(dq * i);
-		glVertex3f(x, -y, z);
+		glVertex3f(r * cos((2.0 * M_PI) / n * i), -0.5 * h, r * sin((2.0 * M_PI) / n * i));
 	}
 	glEnd();
 	glPopMatrix();
