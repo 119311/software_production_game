@@ -1,84 +1,93 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
-#include <array>
-#include <cmath>
-#include <const.hpp>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
-typedef struct
+#include <stdio.h>
+#define MAX_X      30
+#define MIN_X      -30
+#define MAX_Y      30
+#define MIN_Y      -30
+#define MAX_Z      30
+#define MIN_Z      -30
+#define X_SIZE     1200
+#define Y_SIZE     800
+#define XRATE      (X_SIZE / (float) (MAX_X - MIN_X))
+#define tekinum    7
+#define misnum     3
+#define BXsize     1200
+#define BYsize     800
+#define OpeXsize   720
+#define OpeYsize   480
+#define pop_Xsize  240
+#define pop2_Xsize 350
+#define pop_Ysize  60
+#define TRINUM     100000
+#define MYDUR      10
+#define TEKIDUR    150
+
+// Textureイメージのサイズ
+#define ImWidth  120    // appended 11/22
+#define ImHeight 160    // appended 11/22
+#define TexNum   2      // appended 11/22
+
+#ifdef Main
+#define FLOAT  float
+#define INT    int
+#define STRUCT struct
+#define UCHAR  unsigned char    // appended 12/16
+#else
+#define FLOAT  extern float
+#define INT    extern int
+#define STRUCT extern struct
+#define UCHAR  extern unsigned char    // appended 11/22
+#endif
+
+FLOAT rotx, roty, rotz;
+INT   mouse_flag, story_flag, select_flag, scenario_flag, Lunatic_flag, auto_flag;
+INT   mv, back_flag, bomcharge, second1, second2, minute1, minute2, charge;    // For Rolling Background image
+UCHAR Recoad[4];
+UCHAR TexImage[TexNum][ImWidth * ImHeight * 3];    // appended 11/22
+UCHAR background[BXsize * BYsize * 3];
+UCHAR title[BXsize * BYsize * 3];
+UCHAR operate[OpeXsize * OpeYsize * 3];
+UCHAR operate2[OpeXsize * OpeYsize * 3];
+UCHAR fkey1[pop_Xsize * pop_Ysize * 3];
+UCHAR fkey2[pop2_Xsize * pop_Ysize * 3];
+UCHAR rkey[pop2_Xsize * pop_Ysize * 3];
+UCHAR scenario1[BXsize * BYsize * 3];
+UCHAR scenario2[BXsize * BYsize * 3];
+UCHAR scenario3[BXsize * BYsize * 3];
+UCHAR gameover[BXsize * BYsize * 3];
+UCHAR gameclear[BXsize * BYsize * 3];
+UCHAR gamepop[pop_Xsize * pop_Ysize * 3];
+
+STRUCT zokusei
 {
-	float posX;
-	float posY;
-	float posZ;
+	float posx;
+	float posy;
+	float posz;
 	float vx;
 	float vy;
-	float rotX;
-	float rotY;
-	float rotZ;
-	int   tflag;
-	int   shape;
+	float rotx;
+	float roty;
+	float rotz;
+	int   tflag;    //見えるor消える判定
+	int   shape;    //形のフラグ
 	int   durability;
-} property;
+}
+teki[tekinum], miss[misnum], myChara, tekimiss[misnum], Bom;
 
-typedef struct
+STRUCT point
 {
 	float x;
 	float y;
 	float z;
-} point;
+}
+po[TRINUM][3], nv[TRINUM];
+INT trinum;
 
-extern float    rotX, rotY, rotZ, tx, ty, tz;
-extern int      mouseFlag, mv, selectFlag, storyFlag, trinum;
-extern property enemy[ENEMY_NUMBER], missile[MISSILE_NUMBER], player, enemyMissile[MISSILE_NUMBER];
-extern int      gamePop[popXsize * popYsize * 3], background[WINDOW_WIDTH * WINDOW_HEIGHT * 3], gameClear[popXsize * popYsize * 3], gameOver[popXsize * popYsize * 3], story1[WINDOW_WIDTH * WINDOW_HEIGHT * 3], story2[WINDOW_WIDTH * WINDOW_HEIGHT * 3], TexImage[TexNum][IMAGE_WIDTH * IMAGE_HEIGHT * 3], title[WINDOW_WIDTH * WINDOW_HEIGHT * 3];
-
-void collisionJudge(property *enemy, property *missile, property *enemyMissile);
-void drawCone(const float *a, const float *d, const float *s);
-void drawCube(const float *a, const float *d, const float *s);
-void drawCylinder(const float *a, const float *d, const float *s);
-void drawDodecahedron(const float *a, const float *d, const float *s);
-void drawEnemyHitPointBar(int c);
-void drawEnemyMissile(void);
-void drawIcosahedron(const float *a, const float *d, const float *s);
-void drawMissile(void);
-void drawPlayerHitPointBar(int c);
-void drawOctahedron(const float *a, const float *d, const float *s);
-void drawPlane(void);
-void drawPlaneWithTexture(int i);
-void drawSphere(const float *a, const float *d, const float *s);
-void drawStl(const float *a, const float *d, const float *s, point po[][3], point nv[], int trinum);
-void drawTeapot(const float *a, const float *d, const float *s);
-void drawTorus(const float *a, const float *d, const float *s);
-void enemyCharacter(property *enemy);
-void idleProc(void);
-void image(void);
-void initEnemyProperty(int i, property enemy[]);
-void initGlSettings(void);
-void initializeTexture(int TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3], const char *fname[]);
-void initLightSettings(void);
-void initPlayerProperty(void);
-void initProperty(void);
-void keyboardProc(uint8_t key, int x, int v);
-void loadBackground(int background[]);
-void loadGameClear(int gameClear[]);
-void loadGameOver(int gameOver[]);
-void loadStoryImage1(int story1[]);
-void loadStoryImage2(void);
-void loadTexture(int n, const char *fname[], int TexImage[][IMAGE_WIDTH * IMAGE_HEIGHT * 3]);
-void loadTitle(int title[]);
-void motionProc(int x, int v);
-void mouseProc(int button, int state, int x, int y);
-void playerCircle(const float r, int n);
-void playerDisc(const float r, int n);
-void playerSolidCylinder(const float r, const float h, int n);
-void playerStl1(point po[][3], point nv[], int trinum);
-void playerWireCylinder(const float r, const float h, int n);
-void readStlFighter(point po[][3], point nv[], int trinum);
-void SolidCylinder(const float r, const float h, int n);
-void story(int storyFlag);
-void updateEnemyMissile(void);
-void updateMissile(void);
-void updatePlayer(void);
+#ifdef Main
+void keyboard_proc(unsigned char, int, int);
+void mouse_proc(int, int, int, int);
+void motion_proc(int, int);
+void initialize_Texture(void);    // appended 11/22
+#endif
